@@ -20,15 +20,23 @@ Ollama), not from this Python program.  This module only:
 Public API:
     run_developer(plan) -> str
     validate_code(code) -> str
+    run_developer_revision(original_code, review_notes, benchmark_report,
+                           requirements, plan) -> str
 """
 
 import json
 import os
+import re
 
 from ollama import chat
 
 # Qwen model served by the local Ollama installation.
 MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:1.5b")
+
+# Model used for the post-review revision. A larger model is used by default
+# because the revision must reconcile code, reviews and benchmark data; it can
+# be overridden with the REVISION_MODEL environment variable.
+REVISION_MODEL = os.environ.get("REVISION_MODEL", "qwen3:8b")
 
 ALLOWED_ACTIONS = {"FORWARD", "LEFT", "RIGHT", "STOP"}
 
@@ -100,6 +108,40 @@ Requirements for the code you produce:
 You will receive the plan as the user message. Write the code now."""
 
 
+REVISION_SYSTEM_PROMPT = """You are a senior robot software engineer revising
+an existing navigation module after testing and review. You receive:
+    1. the ORIGINAL navigation code (it defines decide_next_move(state)),
+    2. the reviewer notes from the logical simulation,
+    3. the IR-SIM benchmark report (per-world reached_goal, collision_or_done,
+       steps_taken, efficiency_status, final_pose) and its review,
+    4. the validated requirements and the validated navigation plan.
+
+Your job is to produce a CORRECTED version of decide_next_move(state) that
+fixes every concrete problem listed in the reviews/benchmark.
+
+Hard requirements for the revised code:
+1. Plain, valid Python 3, standard library only. No imports, no file or
+   network access, no eval/exec, no user input. It must stay a pure,
+   deterministic logic module.
+2. It MUST define decide_next_move(state) taking a dict with EXACTLY these
+   six boolean keys:
+       goal_ahead, goal_on_left, goal_on_right,
+       front_blocked, left_blocked, right_blocked
+   and return ONLY one of: "FORWARD", "LEFT", "RIGHT", "STOP".
+3. Correct behaviour:
+   - Never return a direction that is blocked.
+   - When the goal lies in a direction that is not blocked, move that way.
+   - When the front is blocked, choose a side that is not blocked; bias the
+     choice toward the side the goal is on, and do NOT alternate sides on
+     consecutive equivalent states (this prevents oscillation).
+   - When the goal is reached by the caller it will not be inferred from the
+     state, so STOP only when every direction is blocked.
+4. Keep the implementation small and explicit; helper functions are allowed
+   but decide_next_move(state) must be fully self-contained in its decisions.
+5. Output ONLY the Python code - no explanations, no markdown code fences,
+   no thinking text, no extra words before or after the code."""
+
+
 def call_qwen(plan):
     """Send the system prompt + the validated plan to Qwen through Ollama and
     return the raw response text (which should be Python code)."""
@@ -131,8 +173,10 @@ def call_qwen(plan):
 
 
 def _strip_code_fence(text):
-    """Remove a wrapping markdown code fence, if Qwen adds one."""
-    text = text.strip()
+    """Remove qwen3-style reasoning blocks and a wrapping markdown code
+    fence, if the model adds either of them."""
+    # Reasoning models may emit <think>...</think> before the answer.
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
     if text.startswith("```"):
         lines = text.splitlines()
         if lines and lines[0].startswith("```"):
@@ -208,6 +252,108 @@ def run_developer(plan):
 
     cleaned = _strip_code_fence(response_text)
     return validate_code(cleaned)
+
+
+def _as_text(value):
+    """Render an artifact (dict/list) as readable text; strings pass through."""
+    if isinstance(value, str):
+        return value
+    return json.dumps(value, indent=2, ensure_ascii=False)
+
+
+def call_qwen_revision(original_code, review_notes, benchmark_report,
+                       requirements, plan, feedback=""):
+    """Send the original code together with the review notes, benchmark
+    report, requirements and plan to the revision model and return the raw
+    response text (which should be the revised Python code)."""
+    user_content = (
+        (feedback + "\n\n" if feedback else "")
+        + "ORIGINAL NAVIGATION CODE:\n"
+        + original_code
+        + "\n\nREVIEW NOTES (logical simulation):\n"
+        + _as_text(review_notes)
+        + "\n\nIR-SIM BENCHMARK REPORT AND REVIEW:\n"
+        + _as_text(benchmark_report)
+        + "\n\nVALIDATED REQUIREMENTS:\n"
+        + _as_text(requirements)
+        + "\n\nVALIDATED PLAN:\n"
+        + _as_text(plan)
+        + "\n\nWrite the FULL revised navigation module now."
+    )
+
+    response = chat(
+        model=REVISION_MODEL,
+        messages=[
+            {"role": "system", "content": REVISION_SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ],
+        options={"temperature": 0.2, "num_predict": 2500},
+    )
+
+    if hasattr(response, "message"):
+        message = response.message
+        if hasattr(message, "content"):
+            return message.content
+    if isinstance(response, dict):
+        try:
+            return response["message"]["content"]
+        except (KeyError, IndexError, TypeError) as exc:
+            raise RuntimeError(
+                "Unexpected response from the revision model: {}".format(response)
+            ) from exc
+    raise RuntimeError(
+        "Unexpected response from the revision model: {}".format(response)
+    )
+
+
+def run_developer_revision(original_code, review_notes, benchmark_report,
+                           requirements, plan, out_path=None):
+    """Produce a revised navigation module after testing and review.
+
+    Receives the original navigation code, the review notes, the benchmark
+    report (the benchmark review may be embedded), the requirements and the
+    plan. Asks the revision LLM for a new navigation logic, validates the
+    answer (up to three attempts, feeding validation errors back), and saves
+    it as a NEW file (generated/navigation_logic_revised.py by default).
+    Returns the validated revised code as a string."""
+    if out_path is None:
+        here = os.path.dirname(os.path.abspath(__file__))
+        out_path = os.path.join(
+            here, "generated", "navigation_logic_revised.py"
+        )
+
+    last_error = None
+    feedback = ""
+
+    for _attempt in range(1, 4):
+        response_text = call_qwen_revision(
+            original_code, review_notes, benchmark_report, requirements,
+            plan, feedback
+        )
+        cleaned = _strip_code_fence(response_text)
+
+        try:
+            revised = validate_code(cleaned)
+        except ValueError as exc:
+            last_error = exc
+            feedback = (
+                "Your previous revised code was invalid: {}. Output ONLY "
+                "valid plain Python code defining decide_next_move(state), "
+                "with no thinking text and no markdown fences.".format(exc)
+            )
+            continue
+
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(revised)
+            if not revised.endswith("\n"):
+                f.write("\n")
+        return revised
+
+    raise ValueError(
+        "Developer revision failed to produce valid code after 3 attempts: "
+        "{}".format(last_error)
+    )
 
 
 if __name__ == "__main__":

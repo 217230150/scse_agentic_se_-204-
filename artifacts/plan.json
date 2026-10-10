@@ -8,12 +8,11 @@
   ],
   "safe_stop": true,
   "avoid.obstacles": true,
-  "strategy": "The robot will navigate towards its goal by moving forward and turning as necessary to avoid obstacles. If an obstacle is detected, the robot will turn and try a new path. If no safe path is found, the robot will stop and wait for a new command.",
+  "strategy": "The robot will navigate towards its goal by moving forward and turning as necessary to avoid obstacles. It will stop when it reaches the goal or when it cannot proceed safely.",
   "decisions": [
-    "If an obstacle is detected, turn LEFT.",
-    "If an obstacle is detected, turn RIGHT.",
-    "If an obstacle is detected, STOP.",
+    "If an obstacle is detected in front, turn LEFT.",
+    "If an obstacle is detected on the left, turn RIGHT.",
     "If no direction is safe, STOP."
   ],
-  "stop_condition": "The robot will stop when it reaches its goal or when no direction is safe to move into."
+  "stop_condition": "Reaching the goal or when no direction is safe to move into."
 }

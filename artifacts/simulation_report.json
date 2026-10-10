@@ -1,0 +1,1211 @@
+{
+  "total_scenarios": 80,
+  "passed_scenarios": 80,
+  "failed_scenarios": 0,
+  "success_rate": 1.0,
+  "named_scenario_count": 16,
+  "exhaustive_scenario_count": 64,
+  "failures": [],
+  "results": [
+    {
+      "name": "goal_ahead_front_clear",
+      "description": "Goal straight ahead and nothing blocks the front: drive forward.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "goal_left_left_clear",
+      "description": "Goal is on the left and the left is clear: turn left.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "goal_right_right_clear",
+      "description": "Goal is on the right and the right is clear: turn right.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "goal_ahead_front_blocked_left_clear",
+      "description": "Goal ahead but the front is blocked: detour via the clear left.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "goal_ahead_front_left_blocked_right_clear",
+      "description": "Goal ahead, front and left blocked, right clear: turn right.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "goal_left_but_left_blocked_front_clear",
+      "description": "Goal on the left but the left is blocked: keep a clear forward path.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "goal_right_but_right_blocked_front_clear",
+      "description": "Goal on the right but the right is blocked: keep a clear forward path.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "front_blocked_both_sides_clear",
+      "description": "Front blocked, both sides clear: try the left first.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "front_left_blocked_right_clear",
+      "description": "Front and left blocked, right clear: turn right.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "all_directions_blocked",
+      "description": "Every direction blocked: stop safely.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "goal_ahead_all_directions_blocked",
+      "description": "Goal ahead but every direction is blocked: stop safely.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "no_goal_flag_front_clear",
+      "description": "No goal direction reported and the front is clear: move forward.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "goal_left_front_blocked_left_clear",
+      "description": "Goal on the left, front blocked, left clear: turn left.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "goal_right_front_blocked_left_clear",
+      "description": "Goal on the right and the right is clear: turn right toward goal.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "goal_right_right_blocked_left_clear_front_blocked",
+      "description": "Goal right but right blocked; left is the only clear detour.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "goal_left_left_blocked_right_clear_front_blocked",
+      "description": "Goal left but left blocked; right is the only clear detour.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go0_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go0_go1_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go0_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go0_go1_go1_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": false,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go0_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go0_go1_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": false,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go0_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": false,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr0_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr0_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr0_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr0_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": false,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "FORWARD",
+      "actual": "FORWARD",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr1_le0_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": false
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr1_le0_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": false,
+        "right_blocked": true
+      },
+      "expected": "LEFT",
+      "actual": "LEFT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr1_le1_ri0",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": false
+      },
+      "expected": "RIGHT",
+      "actual": "RIGHT",
+      "passed": true
+    },
+    {
+      "name": "exhaustive_go1_go1_go1_fr1_le1_ri1",
+      "description": "Exhaustive state checked against the independent oracle.",
+      "state": {
+        "goal_ahead": true,
+        "goal_on_left": true,
+        "goal_on_right": true,
+        "front_blocked": true,
+        "left_blocked": true,
+        "right_blocked": true
+      },
+      "expected": "STOP",
+      "actual": "STOP",
+      "passed": true
+    }
+  ]
+}

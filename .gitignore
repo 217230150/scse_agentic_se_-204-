@@ -5,6 +5,11 @@
 __pycache__/
 *.py[cod]
 *.log
+# but keep the required pipeline trace
+!trace.log
+
+# Virtual environment
+.venv/
 
 # Temporary run/debug output
 _run*.txt
