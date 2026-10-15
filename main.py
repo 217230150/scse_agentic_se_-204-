@@ -1,3 +1,23 @@
+# ============================================================================
+# AI Usage Statement (course requirement: all AI usage must be documented)
+# Model environment: this project was developed and tested with Qwen
+# models served locally by Ollama (pipeline model qwen2.5:1.5b, revision
+# model qwen3:8b; the Analyst stage uses the DashScope Qwen API). No paid
+# model services were used, and no prohibited agent frameworks (Dify /
+# MetaGPT etc.) -- the agents are plain Python implementations calling the
+# Ollama API directly.
+# Reason for using AI: to keep operations convenient, the code concise and
+# readable, and to help later reviewers understand and check the code
+# logic. Prompts, raw model outputs and human revisions are recorded in
+# trace.log and the artifacts/ directory, and in the per-file note below.
+# AI involvement: the overall structure and core logic of this file were
+# written by the team; prompt engineering and the validation / revision-
+# loop sections (model-response extraction, generated-test validation,
+# final version adoption) were drafted with AI assistance and then
+# reviewed by hand and verified by real runs. Runtime artifacts produced
+# by Qwen (navigation logic, test module, plan, etc.) are stored under
+# generated/ and artifacts/.
+# ============================================================================
 """
 main.py
 
@@ -398,7 +418,10 @@ def main():
 
         # Keep the better of the two logics as the final navigation module.
         # Logical simulation success is weighted alongside benchmark success
-        # and efficiency.
+        # and efficiency. A revision is only adopted when it also passes the
+        # generated pytest suite; ties without a passing test suite fall back
+        # to the proven v1 logic (the revised file is still kept as an
+        # artifact for the review loop).
         first_score = (
             benchmark_report["success_rate"] * 2
             + benchmark_report["efficiency_rate"]
@@ -409,18 +432,19 @@ def main():
             + second_pass["benchmark_report"]["efficiency_rate"]
             + second_pass["simulation_report"]["success_rate"]
         )
-        if second_score >= first_score:
+        if second_score >= first_score and second_pass["pytest_passed"]:
             logger.info(
                 "Revised logic kept as generated/navigation_logic.py "
-                "(score %.2f vs %.2f)", second_score, first_score
+                "(score %.2f vs %.2f, pytest passed)",
+                second_score, first_score,
             )
         else:
             save_text(NAVIGATION_PATH, original_code)
             logger.warning(
-                "Revision did not improve the benchmark (score %.2f vs "
-                "%.2f); restored the original logic. The revised file is "
-                "still available at generated/navigation_logic_revised.py",
-                second_score, first_score,
+                "Revision not adopted (score %.2f vs %.2f, pytest_passed=%s); "
+                "restored the original logic. The revised file is still "
+                "available at generated/navigation_logic_revised.py",
+                second_score, first_score, second_pass["pytest_passed"],
             )
     else:
         logger.info("No revision requested by either reviewer")

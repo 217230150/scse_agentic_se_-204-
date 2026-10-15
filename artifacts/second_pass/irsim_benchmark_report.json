@@ -1,0 +1,80 @@
+{
+  "total_worlds": 4,
+  "goals_reached": 4,
+  "success_rate": 1.0,
+  "efficient_worlds": 4,
+  "inefficient_success_worlds": 0,
+  "failed_worlds": 0,
+  "efficiency_rate": 1.0,
+  "average_steps_taken": 193.0,
+  "results": [
+    {
+      "reached_goal": true,
+      "collision_or_done": false,
+      "steps_taken": 193,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "efficient",
+      "efficiency_passed": true,
+      "final_pose": [
+        7.963211951972691,
+        4.376850671335502,
+        -1.200000000000001
+      ],
+      "history_length": 193,
+      "world_name": "easy",
+      "world_file": "irsim_worlds\\world_easy.yaml"
+    },
+    {
+      "reached_goal": true,
+      "collision_or_done": false,
+      "steps_taken": 193,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "efficient",
+      "efficiency_passed": true,
+      "final_pose": [
+        7.963211951972691,
+        4.376850671335502,
+        -1.200000000000001
+      ],
+      "history_length": 193,
+      "world_name": "medium",
+      "world_file": "irsim_worlds\\world_medium.yaml"
+    },
+    {
+      "reached_goal": true,
+      "collision_or_done": false,
+      "steps_taken": 193,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "efficient",
+      "efficiency_passed": true,
+      "final_pose": [
+        7.963211951972691,
+        4.376850671335502,
+        -1.200000000000001
+      ],
+      "history_length": 193,
+      "world_name": "hard",
+      "world_file": "irsim_worlds\\world_hard.yaml"
+    },
+    {
+      "reached_goal": true,
+      "collision_or_done": false,
+      "steps_taken": 193,
+      "max_steps_allowed": 300,
+      "efficient_step_limit": 200,
+      "efficiency_status": "efficient",
+      "efficiency_passed": true,
+      "final_pose": [
+        7.963211951972691,
+        4.376850671335502,
+        -1.200000000000001
+      ],
+      "history_length": 193,
+      "world_name": "custom",
+      "world_file": "irsim_worlds\\world_custom.yaml"
+    }
+  ]
+}

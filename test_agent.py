@@ -1,3 +1,23 @@
+# ============================================================================
+# AI Usage Statement (course requirement: all AI usage must be documented)
+# Model environment: this project was developed and tested with Qwen
+# models served locally by Ollama (pipeline model qwen2.5:1.5b, revision
+# model qwen3:8b; the Analyst stage uses the DashScope Qwen API). No paid
+# model services were used, and no prohibited agent frameworks (Dify /
+# MetaGPT etc.) -- the agents are plain Python implementations calling the
+# Ollama API directly.
+# Reason for using AI: to keep operations convenient, the code concise and
+# readable, and to help later reviewers understand and check the code
+# logic. Prompts, raw model outputs and human revisions are recorded in
+# trace.log and the artifacts/ directory, and in the per-file note below.
+# AI involvement: the overall structure and core logic of this file were
+# written by the team; prompt engineering and the validation / revision-
+# loop sections (model-response extraction, generated-test validation,
+# final version adoption) were drafted with AI assistance and then
+# reviewed by hand and verified by real runs. Runtime artifacts produced
+# by Qwen (navigation logic, test module, plan, etc.) are stored under
+# generated/ and artifacts/.
+# ============================================================================
 """
 test_agent.py
 
@@ -78,6 +98,9 @@ Hard requirements for the test module:
                "left_blocked": False, "right_blocked": False,
            }
            assert decide_next_move(state) == "FORWARD"
+       Every test function MUST be declared with an EMPTY parameter list
+       (def test_name():). Never give a test function parameters or pytest
+       fixtures - build the state dict inside the function body instead.
     4. Every test function must contain at least one assert that compares
        decide_next_move(state) to an expected action string.
     5. Only the Python standard library and pytest may be imported.
@@ -188,6 +211,25 @@ def validate_test_code(code):
     # Must contain assertions.
     if "assert " not in code:
         raise ValueError("Generated test code must contain assert statements.")
+
+    # Test functions must take no parameters (pytest would treat any
+    # parameter as a fixture and error at collection time).
+    for match in re.finditer(r"def\s+(test_[A-Za-z0-9_]+)\s*\(([^)]*)\)", code):
+        if match.group(2).strip():
+            raise ValueError(
+                "Test function '{}' must be declared with an empty parameter "
+                "list (def {}()): build the state dict inside the body "
+                "instead.".format(match.group(1), match.group(1))
+            )
+
+    # Any stdlib module used via attribute access must actually be imported.
+    for name in ("sys", "os"):
+        if re.search(r"\b{}\.".format(name), code) and not re.search(
+            r"^\s*import\s+{}\b".format(name), code, flags=re.MULTILINE
+        ):
+            raise ValueError(
+                "The module uses '{}' but never imports it.".format(name)
+            )
 
     # Must compile as valid Python 3.
     try:

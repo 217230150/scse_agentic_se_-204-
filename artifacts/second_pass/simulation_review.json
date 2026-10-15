@@ -1,0 +1,6 @@
+{
+  "issue": "No issues found",
+  "likely_cause": "All simulated scenarios produced the expected action.",
+  "recommendation": "No revision needed; keep the current navigation logic.",
+  "needs_revision": false
+}

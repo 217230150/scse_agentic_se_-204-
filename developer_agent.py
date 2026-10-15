@@ -1,3 +1,23 @@
+# ============================================================================
+# AI Usage Statement (course requirement: all AI usage must be documented)
+# Model environment: this project was developed and tested with Qwen
+# models served locally by Ollama (pipeline model qwen2.5:1.5b, revision
+# model qwen3:8b; the Analyst stage uses the DashScope Qwen API). No paid
+# model services were used, and no prohibited agent frameworks (Dify /
+# MetaGPT etc.) -- the agents are plain Python implementations calling the
+# Ollama API directly.
+# Reason for using AI: to keep operations convenient, the code concise and
+# readable, and to help later reviewers understand and check the code
+# logic. Prompts, raw model outputs and human revisions are recorded in
+# trace.log and the artifacts/ directory, and in the per-file note below.
+# AI involvement: the overall structure and core logic of this file were
+# written by the team; prompt engineering and the validation / revision-
+# loop sections (model-response extraction, generated-test validation,
+# final version adoption) were drafted with AI assistance and then
+# reviewed by hand and verified by real runs. Runtime artifacts produced
+# by Qwen (navigation logic, test module, plan, etc.) are stored under
+# generated/ and artifacts/.
+# ============================================================================
 """
 developer_agent.py
 
@@ -128,18 +148,48 @@ Hard requirements for the revised code:
        goal_ahead, goal_on_left, goal_on_right,
        front_blocked, left_blocked, right_blocked
    and return ONLY one of: "FORWARD", "LEFT", "RIGHT", "STOP".
-3. Correct behaviour:
+3. Correct behaviour (the full navigation contract):
    - Never return a direction that is blocked.
-   - When the goal lies in a direction that is not blocked, move that way.
+   - When the goal lies in a direction that is not blocked, move that way
+     (goal ahead + clear front => FORWARD; goal left + clear left => LEFT;
+     goal right + clear right => RIGHT).
+   - When no goal flag is set, keep moving to explore: if the front is not
+     blocked return FORWARD; otherwise LEFT if clear, otherwise RIGHT.
    - When the front is blocked, choose a side that is not blocked; bias the
      choice toward the side the goal is on, and do NOT alternate sides on
      consecutive equivalent states (this prevents oscillation).
-   - When the goal is reached by the caller it will not be inferred from the
-     state, so STOP only when every direction is blocked.
+   - Return STOP ONLY when every direction (front, left and right) is
+     blocked. The caller detects goal reaching; STOP must never be used as
+     a substitute for moving when any direction is clear.
 4. Keep the implementation small and explicit; helper functions are allowed
    but decide_next_move(state) must be fully self-contained in its decisions.
 5. Output ONLY the Python code - no explanations, no markdown code fences,
    no thinking text, no extra words before or after the code."""
+
+
+def _message_text(response):
+    """Extract the answer text from an Ollama chat response.
+
+    Reasoning models (e.g. qwen3) can put the whole answer into the
+    'thinking' field and leave 'content' empty.  Fall back to 'thinking'
+    in that case so the pipeline never receives an empty string."""
+    if hasattr(response, "message"):
+        message = response.message
+        content = getattr(message, "content", None)
+        if content and content.strip():
+            return content
+        thinking = getattr(message, "thinking", None)
+        if thinking and thinking.strip():
+            return thinking
+        if content is not None:
+            return content
+    if isinstance(response, dict):
+        message = response.get("message", {})
+        content = message.get("content") or ""
+        if content.strip():
+            return content
+        return message.get("thinking") or content
+    raise RuntimeError("Unexpected response from Qwen: {}".format(response))
 
 
 def call_qwen(plan):
@@ -153,14 +203,13 @@ def call_qwen(plan):
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_content},
         ],
-        options={"temperature": 0.2},
+        think=False,
+        # temperature 0 makes code generation deterministic so repeated
+        # runs of the pipeline produce the same navigation logic.
+        options={"temperature": 0},
     )
 
-    # ollama returns a ChatResponse object (pydantic model).
-    if hasattr(response, "message"):
-        message = response.message
-        if hasattr(message, "content"):
-            return message.content
+    return _message_text(response)
     # Fallback for dict-style responses.
     if isinstance(response, dict):
         try:
@@ -287,23 +336,12 @@ def call_qwen_revision(original_code, review_notes, benchmark_report,
             {"role": "system", "content": REVISION_SYSTEM_PROMPT},
             {"role": "user", "content": user_content},
         ],
-        options={"temperature": 0.2, "num_predict": 2500},
+        think=False,
+        # temperature 0 keeps the revision deterministic and reproducible.
+        options={"temperature": 0, "num_predict": 2500},
     )
 
-    if hasattr(response, "message"):
-        message = response.message
-        if hasattr(message, "content"):
-            return message.content
-    if isinstance(response, dict):
-        try:
-            return response["message"]["content"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise RuntimeError(
-                "Unexpected response from the revision model: {}".format(response)
-            ) from exc
-    raise RuntimeError(
-        "Unexpected response from the revision model: {}".format(response)
-    )
+    return _message_text(response)
 
 
 def run_developer_revision(original_code, review_notes, benchmark_report,
